@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _selectedCategory = null;
   bool isSwitched = false;
   bool? cheked = false;
-  Icon iconUtama = Icon(Icons.wb_sunny);
+  Icon iconUtama = const Icon(Icons.wb_sunny);
   bool? darkValue = false;
   Color whiteText = Colors.black;
   int _currentIndex = 0;
@@ -62,10 +62,67 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          darkValue == true ? Color.fromARGB(255, 41, 41, 41) : Colors.white,
+      backgroundColor: darkValue == true
+          ? const Color.fromARGB(255, 41, 41, 41)
+          : Colors.white,
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const Padding(
+                padding: EdgeInsets.all(25),
+                child: Text("Todo App", style: TextStyle(fontSize: 50))),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: Text("By: Jimmy", style: TextStyle(fontSize: 15)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            ListTile(
+              title: Text('Personal'),
+              trailing: CircleAvatar(
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Routine').length}"),
+              ),
+            ),
+            ListTile(
+              title: Text('Work'),
+              trailing: CircleAvatar(
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Work').length}"),
+              ),
+            ),
+            ListTile(
+              title: Text('Others'),
+              trailing: CircleAvatar(
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Free').length}"),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            ListTile(
+              title: const Text("Dark Mode"),
+              trailing: Switch(
+                value: isSwitched,
+                onChanged: ((value) {
+                  darkValue = value;
+                  setState(() {
+                    isSwitched = value;
+                    whiteText = value ? Colors.white : Colors.black;
+                    iconUtama = value
+                        ? const Icon(Icons.dark_mode)
+                        : const Icon(Icons.wb_sunny);
+                  });
+                }),
+              ),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
-        title: Text('Todos'),
+        title: const Text('Todos'),
         centerTitle: true,
         backgroundColor: darkValue == true ? Colors.black : Colors.purple,
         actions: [
@@ -77,8 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 isSwitched = value;
                 whiteText = value ? Colors.white : Colors.black;
-                iconUtama =
-                    value ? Icon(Icons.dark_mode) : Icon(Icons.wb_sunny);
+                iconUtama = value
+                    ? const Icon(Icons.dark_mode)
+                    : const Icon(Icons.wb_sunny);
               });
             }),
           )
@@ -210,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       todo["title"]!,
                       style: TextStyle(
                         color: darkValue == true
-                            ? Color.fromARGB(255, 41, 41, 41)
+                            ? const Color.fromARGB(255, 41, 41, 41)
                             : Colors.white,
                       ),
                     ),
@@ -218,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       todo["description"]!,
                       style: TextStyle(
                         color: darkValue == true
-                            ? Color.fromARGB(255, 41, 41, 41)
+                            ? const Color.fromARGB(255, 41, 41, 41)
                             : Colors.white,
                       ),
                     ),

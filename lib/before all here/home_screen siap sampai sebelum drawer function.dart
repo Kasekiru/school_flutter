@@ -9,7 +9,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> todos = [];
+  List<Map<String, String>> todos = [
+    // {
+    //   "title": "title",
+    //   "description": "description",
+    //   "startDate": "startDate",
+    //   "endDate": "endDate",
+    //   "category": "Routine"
+    // }
+  ];
+
   void _toggleCategorySelection(int index, String category) {
     setState(() {
       if (_selectedChipIndex == index) {
@@ -25,43 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void addTodo(String title, String description, String startDate,
       String endDate, String category) {
     setState(() {
-      Map<String, dynamic> todo = {
-        'title': title,
-        'description': description,
-        'category': category,
-        'startDate': startDate,
-        'endDate': endDate,
-        'checked': false,
-      };
-
-      todos.add(todo);
-      updateCategoryCount(category);
+      todos.add({
+        "title": title,
+        "description": description,
+        "startDate": startDate,
+        "endDate": endDate,
+        "category": category
+      });
     });
   }
 
-  Map<String, int> categoryCounts = {
-    'Routine': 0,
-    'Work': 0,
-    'Free': 0,
-  };
-
-  void removeTodoByIndex(int index) {
-    setState(() {
-      var todo = todos[index];
-      var category = todo["category"];
-      todos.removeAt(index);
-      updateCategoryCount(category);
-    });
-  }
-
-  void updateCategoryCount(String category) {
-    int uncheckedCount = todos
-        .where((todo) => todo['category'] == category && !todo['checked'])
-        .length;
-    categoryCounts[category] = uncheckedCount;
-  }
-
-  List<Map<String, dynamic>> getFilteredTodos() {
+  List<Map<String, String>> getFilteredTodos() {
     if (_selectedCategory == null) {
       return todos;
     } else if (_selectedCategory == 'Routine') {
@@ -79,19 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void toggleTodoCheckedStatus(int index, bool checked) {
-    setState(() {
-      var todo = todos[index];
-      var category = todo["category"];
-      todo['checked'] = checked;
-      updateCategoryCount(category);
-    });
-  }
-
   int _selectedChipIndex = -1;
   String? _selectedCategory = null;
   bool isSwitched = false;
-  bool? checked = false;
+  bool? cheked = false;
   Icon iconUtama = const Icon(Icons.wb_sunny);
   bool? darkValue = false;
   Color whiteText = Colors.black;
@@ -107,38 +81,44 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             const Padding(
-              padding: EdgeInsets.all(25),
-              child: Text("Todo App", style: TextStyle(fontSize: 50)),
-            ),
+                padding: EdgeInsets.all(25),
+                child: Text("Todo App", style: TextStyle(fontSize: 50))),
             const Padding(
               padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: Text("By: Jimmy", style: TextStyle(fontSize: 15)),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(
+              height: 30,
+            ),
             ListTile(
               title: Text('Personal'),
               trailing: CircleAvatar(
-                child: Text("${categoryCounts['Routine']}"),
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Routine').length}"),
               ),
             ),
             ListTile(
               title: Text('Work'),
               trailing: CircleAvatar(
-                child: Text("${categoryCounts['Work']}"),
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Work').length}"),
               ),
             ),
             ListTile(
               title: Text('Others'),
               trailing: CircleAvatar(
-                child: Text("${categoryCounts['Free']}"),
+                child: Text(
+                    "${todos.where((todo) => todo["category"] == 'Free').length}"),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(
+              height: 30,
+            ),
             ListTile(
               title: const Text("Dark Mode"),
               trailing: Switch(
                 value: isSwitched,
-                onChanged: (value) {
+                onChanged: ((value) {
                   darkValue = value;
                   setState(() {
                     isSwitched = value;
@@ -147,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? const Icon(Icons.dark_mode)
                         : const Icon(Icons.wb_sunny);
                   });
-                },
+                }),
               ),
             )
           ],
@@ -161,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
           iconUtama,
           Switch(
             value: isSwitched,
-            onChanged: (value) {
+            onChanged: ((value) {
               darkValue = value;
               setState(() {
                 isSwitched = value;
@@ -170,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const Icon(Icons.dark_mode)
                     : const Icon(Icons.wb_sunny);
               });
-            },
+            }),
           )
         ],
       ),
@@ -193,6 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
+                        // _selectedChipIndex = 0;
+                        // _selectedCategory = 'Routine';
                         _toggleCategorySelection(0, 'Routine');
                       });
                     },
@@ -221,6 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
+                        // _selectedChipIndex = 1;
+                        // _selectedCategory = 'Work';
                         _toggleCategorySelection(1, 'Work');
                       });
                     },
@@ -250,6 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
+                        // _selectedChipIndex = 2;
+                        // _selectedCategory = 'Free';
                         _toggleCategorySelection(2, 'Free');
                       });
                     },
@@ -280,22 +266,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   collapsedBackgroundColor: Colors.grey[300],
                   backgroundColor: Colors.grey[100],
                   title: ListTile(
+                    // shape: RoundedRectangleBorder(
+                    //   side: BorderSide(color: Colors.black, width: 1),
+                    //   borderRadius: BorderRadius.circular(5),
+                    // ),
                     leading: Checkbox(
                       checkColor: whiteText,
-                      value: todo['checked'] as bool,
-                      onChanged: (val) {
+                      value: cheked,
+                      onChanged: (val) => {
                         setState(() {
-                          var category = todo['category'] as String;
-                          if (val == true) {
-                            todo['checked'] = true;
-                            categoryCounts[category] =
-                                (categoryCounts[category] ?? 0) - 1;
-                          } else {
-                            todo['checked'] = false;
-                            categoryCounts[category] =
-                                (categoryCounts[category] ?? 0) + 1;
-                          }
-                        });
+                          cheked = val;
+                        })
                       },
                     ),
                     title: Text(
@@ -377,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Todos(onSaveTodo: addTodo)));
+                  builder: ((context) => Todos(onSaveTodo: addTodo))));
         },
         child: const Icon(Icons.add),
       ),

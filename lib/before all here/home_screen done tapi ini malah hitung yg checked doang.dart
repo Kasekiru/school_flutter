@@ -35,8 +35,23 @@ class _HomeScreenState extends State<HomeScreen> {
       };
 
       todos.add(todo);
-      updateCategoryCount(category);
     });
+  }
+
+  void removeTodoByIndex(int index) {
+    setState(() {
+      var todo = todos[index];
+      var category = todo["category"];
+      todos.removeAt(index);
+      updateCategoryCount(
+          category!, -1); // Decrease count for the removed todo category
+    });
+  }
+
+  void updateCategoryCount(String category, int countChange) {
+    var categoryCount = categoryCounts[category] ?? 0;
+    categoryCount += countChange;
+    categoryCounts[category] = categoryCount;
   }
 
   Map<String, int> categoryCounts = {
@@ -44,22 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'Work': 0,
     'Free': 0,
   };
-
-  void removeTodoByIndex(int index) {
-    setState(() {
-      var todo = todos[index];
-      var category = todo["category"];
-      todos.removeAt(index);
-      updateCategoryCount(category);
-    });
-  }
-
-  void updateCategoryCount(String category) {
-    int uncheckedCount = todos
-        .where((todo) => todo['category'] == category && !todo['checked'])
-        .length;
-    categoryCounts[category] = uncheckedCount;
-  }
 
   List<Map<String, dynamic>> getFilteredTodos() {
     if (_selectedCategory == null) {
@@ -76,15 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void onTapTapped(int index) {
     setState(() {
       _currentIndex = index;
-    });
-  }
-
-  void toggleTodoCheckedStatus(int index, bool checked) {
-    setState(() {
-      var todo = todos[index];
-      var category = todo["category"];
-      todo['checked'] = checked;
-      updateCategoryCount(category);
     });
   }
 
@@ -138,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text("Dark Mode"),
               trailing: Switch(
                 value: isSwitched,
-                onChanged: (value) {
+                onChanged: ((value) {
                   darkValue = value;
                   setState(() {
                     isSwitched = value;
@@ -147,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? const Icon(Icons.dark_mode)
                         : const Icon(Icons.wb_sunny);
                   });
-                },
+                }),
               ),
             )
           ],
@@ -161,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
           iconUtama,
           Switch(
             value: isSwitched,
-            onChanged: (value) {
+            onChanged: ((value) {
               darkValue = value;
               setState(() {
                 isSwitched = value;
@@ -170,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const Icon(Icons.dark_mode)
                     : const Icon(Icons.wb_sunny);
               });
-            },
+            }),
           )
         ],
       ),
@@ -285,15 +275,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       value: todo['checked'] as bool,
                       onChanged: (val) {
                         setState(() {
-                          var category = todo['category'] as String;
+                          todo['checked'] = val;
                           if (val == true) {
-                            todo['checked'] = true;
-                            categoryCounts[category] =
-                                (categoryCounts[category] ?? 0) - 1;
+                            categoryCounts[todo['category'] as String] =
+                                (categoryCounts[todo['category'] as String] ??
+                                        0) +
+                                    1;
                           } else {
-                            todo['checked'] = false;
-                            categoryCounts[category] =
-                                (categoryCounts[category] ?? 0) + 1;
+                            categoryCounts[todo['category'] as String] =
+                                (categoryCounts[todo['category'] as String] ??
+                                        0) -
+                                    1;
                           }
                         });
                       },
@@ -377,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Todos(onSaveTodo: addTodo)));
+                  builder: ((context) => Todos(onSaveTodo: addTodo))));
         },
         child: const Icon(Icons.add),
       ),

@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isSwitched = false;
   bool? checked = false;
   Icon iconUtama = const Icon(Icons.wb_sunny);
-  bool? darkValue = false;
+  bool darkValue = false;
   Color whiteText = Colors.black;
   int _currentIndex = 0;
 
@@ -377,7 +377,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Todos(onSaveTodo: addTodo)));
+                  builder: (context) => Todos(
+                        onSaveTodo: addTodo,
+                        dark: darkValue,
+                      )));
         },
         child: const Icon(Icons.add),
       ),

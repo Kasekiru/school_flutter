@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import 'latihan m10.dart';
+// import 'latihan m11.dart'; //ubah terus
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
       ),
       home: const HomeScreen(),
-      // home: LatihanApp(),
+      // home: LatihanM11(),
       debugShowCheckedModeBanner: false,
     );
   }

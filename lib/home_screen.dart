@@ -22,6 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  List<Map<String, dynamic>> getNotFinishedTodos() {
+    return todos.where((todo) => !(todo['checked'] as bool)).toList();
+  }
+
+  List<Map<String, dynamic>> getFinishedTodos() {
+    return todos.where((todo) => todo['checked'] as bool).toList();
+  }
+
   void addTodo(String title, String description, String startDate,
       String endDate, String category) {
     setState(() {
@@ -174,106 +182,113 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              spacing: 8.0,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.blue,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(30.0),
-                    color: _selectedChipIndex == 0 ? Colors.blue : Colors.white,
+      body: Column(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            spacing: 8.0,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2.0,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _toggleCategorySelection(0, 'Routine');
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Routine',
-                        style: TextStyle(
-                          color: _selectedChipIndex == 0
-                              ? Colors.white
-                              : Colors.blue,
-                        ),
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: _selectedChipIndex == 0 ? Colors.blue : Colors.white,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _toggleCategorySelection(0, 'Routine');
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Routine',
+                      style: TextStyle(
+                        color: _selectedChipIndex == 0
+                            ? Colors.white
+                            : Colors.blue,
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(30.0),
-                    color: _selectedChipIndex == 1 ? Colors.red : Colors.white,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.red,
+                    width: 2.0,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _toggleCategorySelection(1, 'Work');
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Work',
-                        style: TextStyle(
-                          color: _selectedChipIndex == 1
-                              ? Colors.white
-                              : Colors.red,
-                        ),
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: _selectedChipIndex == 1 ? Colors.red : Colors.white,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _toggleCategorySelection(1, 'Work');
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Work',
+                      style: TextStyle(
+                        color:
+                            _selectedChipIndex == 1 ? Colors.white : Colors.red,
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.yellow,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(30.0),
-                    color:
-                        _selectedChipIndex == 2 ? Colors.yellow : Colors.white,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.yellow,
+                    width: 2.0,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _toggleCategorySelection(2, 'Free');
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Free',
-                        style: TextStyle(
-                          color: _selectedChipIndex == 2
-                              ? Colors.white
-                              : Colors.yellow,
-                        ),
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: _selectedChipIndex == 2 ? Colors.yellow : Colors.white,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _toggleCategorySelection(2, 'Free');
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Free',
+                      style: TextStyle(
+                        color: _selectedChipIndex == 2
+                            ? Colors.white
+                            : Colors.yellow,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+            children: [
+              Text("Not Finished"),
+              Divider(),
+            ],
+          ),
+        ),
+        if (todos.isNotEmpty) ...[
           Expanded(
             child: ListView.builder(
-              itemCount: getFilteredTodos().length,
+              itemCount: getNotFinishedTodos().length,
               itemBuilder: (context, index) {
-                var todo = getFilteredTodos()[index];
+                var todo = getNotFinishedTodos()[index];
                 return ExpansionTile(
                   tilePadding: const EdgeInsets.symmetric(horizontal: 16),
                   childrenPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -350,13 +365,108 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  children: [Text("helloo")],
+                  children: [Text("")],
                 );
               },
             ),
           ),
         ],
-      ),
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+            children: [
+              Text("Finished"),
+              Divider(),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: getFinishedTodos().length,
+            itemBuilder: (context, index) {
+              var todo = getFinishedTodos()[index];
+              return ExpansionTile(
+                tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 16),
+                collapsedBackgroundColor: Colors.grey[300],
+                backgroundColor: Colors.grey[100],
+                title: ListTile(
+                  leading: Checkbox(
+                    checkColor: whiteText,
+                    value: todo['checked'] as bool,
+                    onChanged: (val) {
+                      setState(() {
+                        var category = todo['category'] as String;
+                        if (val == true) {
+                          todo['checked'] = true;
+                          categoryCounts[category] =
+                              (categoryCounts[category] ?? 0) - 1;
+                        } else {
+                          todo['checked'] = false;
+                          categoryCounts[category] =
+                              (categoryCounts[category] ?? 0) + 1;
+                        }
+                      });
+                    },
+                  ),
+                  title: Text(
+                    todo["title"]!,
+                    style: TextStyle(
+                      color: darkValue == true
+                          ? const Color.fromARGB(255, 41, 41, 41)
+                          : Colors.white,
+                    ),
+                  ),
+                  subtitle: Text(
+                    todo["description"]!,
+                    style: TextStyle(
+                      color: darkValue == true
+                          ? const Color.fromARGB(255, 41, 41, 41)
+                          : Colors.white,
+                    ),
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 2, vertical: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.blue,
+                        ),
+                        child: Text(
+                          todo["category"]!,
+                          style: TextStyle(
+                            color: whiteText,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${todo["startDate"]!} s/d',
+                        style: TextStyle(
+                          color: whiteText,
+                          fontSize: 10,
+                        ),
+                      ),
+                      Text(
+                        '${todo["endDate"]!} s/d',
+                        style: TextStyle(
+                          color: whiteText,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                children: [Text("helloo")],
+              );
+            },
+          ),
+        ),
+      ]),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: darkValue == true ? Colors.black : Colors.white,
         selectedItemColor: Colors.purple,

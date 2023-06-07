@@ -23,11 +23,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Map<String, dynamic>> getNotFinishedTodos() {
-    return todos.where((todo) => !(todo['checked'] as bool)).toList();
+    if (_selectedCategory == null) {
+      return todos.where((todo) => !(todo['checked'] as bool)).toList();
+    } else {
+      return todos
+          .where((todo) =>
+              todo['category'] == _selectedCategory &&
+              !(todo['checked'] as bool))
+          .toList();
+    }
   }
 
   List<Map<String, dynamic>> getFinishedTodos() {
-    return todos.where((todo) => todo['checked'] as bool).toList();
+    if (_selectedCategory == null) {
+      return todos.where((todo) => todo['checked'] as bool).toList();
+    } else {
+      return todos
+          .where((todo) =>
+              todo['category'] == _selectedCategory &&
+              (todo['checked'] as bool))
+          .toList();
+    }
   }
 
   void addTodo(String title, String description, String startDate,
@@ -191,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.blue,
+                    color: _selectedChipIndex == 0 ? Colors.blue : Colors.grey,
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.circular(30.0),
@@ -219,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.red,
+                    color: _selectedChipIndex == 1 ? Colors.red : Colors.grey,
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.circular(30.0),
@@ -246,7 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.yellow,
+                    color:
+                        _selectedChipIndex == 2 ? Colors.yellow : Colors.grey,
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.circular(30.0),

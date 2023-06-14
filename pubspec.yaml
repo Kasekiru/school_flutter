@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
+
   carousel_slider: ^4.2.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
   intl: ^0.18.1
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:
@@ -61,14 +62,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets :
-    - assets/images/person5.jpg
-    - assets/images/person4.jpg
+    # - assets/images/person5.jpg
+    # - assets/images/person4.jpg
     - assets/images/person3.jpg
     - assets/images/person2.jpg
     - assets/images/person1.jpg
-    - assets/images/logo.png
+    # - assets/images/logo.png
     - assets/images/pavlova.jpg
-    - assets/images/img.png
+    # - assets/images/img.png
     - assets/images/placeholder.jpg
     - assets/images/politics.jpg
     - assets/images/railways.jpg

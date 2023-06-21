@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'todos.dart';
 import 'calendar.dart';
@@ -57,6 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList()
           .length;
     }
+  }
+
+  int getTotalnotFinishedTodosCount() {
+    int totalCount = 0;
+    totalCount = todos.length;
+    return totalCount;
   }
 
   int getTotalFinishedTodosCount() {
@@ -128,6 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
       return todos
           .where((todo) => todo["category"] == _selectedCategory)
           .toList();
+    }
+  }
+
+  textnya() {
+    String allDone = "All Task Done";
+    int angka = getTotalnotFinishedTodosCount() - getTotalFinishedTodosCount();
+    String mantap = "${angka}";
+    String teks = "You Still have ${mantap} Task left";
+    if (getTotalFinishedTodosCount() == getTotalnotFinishedTodosCount()) {
+      return allDone;
+    } else {
+      return teks;
     }
   }
 
@@ -543,29 +563,37 @@ class _HomeScreenState extends State<HomeScreen> {
           calendar(),
           Column(
             children: [
-              Card(
-                child: ListTile(
-                  leading: CircleAvatar(),
-                  title: Text("Jimmy"),
-                  subtitle:
-                      Text("Task Finished: ${getTotalFinishedTodosCount()}"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 3,
+                  child: ListTile(
+                    leading: CircleAvatar(),
+                    title: Text("Jimmy"),
+                    subtitle:
+                        Text("Task Finished: ${getTotalFinishedTodosCount()}"),
+                  ),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 300,
+                    width: 200,
                     child: Card(
                       child: ListTile(
                         isThreeLine: true,
                         title: Center(child: Text("Routine")),
                         subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Center(
                                 child: Text(
-                                    "${getFinishedTodosCount('Routine')}")),
+                              "${getFinishedTodosCount('Routine')}",
+                              style:
+                                  TextStyle(fontSize: 36, color: Colors.orange),
+                            )),
                             SizedBox(height: 4),
                             Center(child: Text("Finished")),
                           ],
@@ -574,7 +602,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Container(
-                    width: 300,
+                    width: 200,
                     child: Card(
                       child: ListTile(
                         isThreeLine: true,
@@ -583,8 +611,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Center(
-                                child:
-                                    Text("${getFinishedTodosCount('Work')}")),
+                                child: Text(
+                              "${getFinishedTodosCount('Work')}",
+                              style:
+                                  TextStyle(fontSize: 36, color: Colors.blue),
+                            )),
                             SizedBox(height: 4),
                             Center(child: Text("Finished")),
                           ],
@@ -593,7 +624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Container(
-                    width: 300,
+                    width: 200,
                     child: Card(
                       child: ListTile(
                         isThreeLine: true,
@@ -602,8 +633,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Center(
-                                child:
-                                    Text("${getFinishedTodosCount('Free')}")),
+                                child: Text(
+                              "${getFinishedTodosCount('Free')}",
+                              style:
+                                  TextStyle(fontSize: 36, color: Colors.green),
+                            )),
                             SizedBox(height: 4),
                             Center(child: Text("Finished")),
                           ],
@@ -613,6 +647,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                    elevation: 3,
+                    child: Container(
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SliderTheme(
+                              data: SliderThemeData(
+                                thumbShape: RoundSliderThumbShape(
+                                    disabledThumbRadius: 0),
+                                overlayShape:
+                                    RoundSliderOverlayShape(overlayRadius: 0),
+                                disabledActiveTrackColor: Colors.orange,
+                                disabledInactiveTickMarkColor: null,
+                              ),
+                              child: Slider(
+                                value: getTotalFinishedTodosCount().toDouble(),
+                                onChanged: null,
+                                max: getTotalnotFinishedTodosCount().toDouble(),
+                              ),
+                            ),
+                            Text("${textnya()}")
+                          ],
+                        ),
+                      ),
+                    )),
+              )
             ],
           )
         ],

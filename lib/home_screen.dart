@@ -171,6 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool isFABVisible = true;
+
+  void toggleFABVisibility() {
+    setState(() {
+      isFABVisible = !isFABVisible;
+    });
+  }
+
   int _selectedChipIndex = -1;
   String? _selectedCategory = null;
   bool isSwitched = false;
@@ -560,7 +568,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ]),
-          calendar(),
+          CalendarPage(),
           Column(
             children: [
               Padding(
@@ -699,18 +707,20 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile')
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Todos(
-                        onSaveTodo: addTodo,
-                        dark: darkValue,
-                      )));
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _currentIndex != 1 && isFABVisible
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Todos(
+                              onSaveTodo: addTodo,
+                              dark: darkValue,
+                            )));
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

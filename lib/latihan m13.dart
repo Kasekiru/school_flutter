@@ -12,9 +12,21 @@ class _LatihanM13State extends State<LatihanM13> {
   double sliderValue = 0;
   Timer? timer;
   final double maxSliderValue = 285; // Adjust the maximum slider value here
+  bool isPlaying = true; // Flag to track whether the music is playing or paused
 
   @override
   void initState() {
+    startTimer(); // Start the timer when the widget is initialized
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
+  }
+
+  void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       setState(() {
         if (sliderValue < maxSliderValue) {
@@ -25,13 +37,25 @@ class _LatihanM13State extends State<LatihanM13> {
         }
       });
     });
-    super.initState();
   }
 
-  @override
-  void dispose() {
-    timer?.cancel(); // Cancel the timer when the widget is disposed
-    super.dispose();
+  void pauseTimer() {
+    timer?.cancel();
+  }
+
+  void playTimer() {
+    startTimer();
+  }
+
+  void togglePlayPause() {
+    setState(() {
+      if (isPlaying) {
+        pauseTimer();
+      } else {
+        playTimer();
+      }
+      isPlaying = !isPlaying;
+    });
   }
 
   @override
@@ -53,7 +77,7 @@ class _LatihanM13State extends State<LatihanM13> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                      "images/taeyang.jpg"), // Set the path to your desired image
+                      "images/cat.png"), // Set the path to your desired image
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -61,7 +85,7 @@ class _LatihanM13State extends State<LatihanM13> {
             ),
             SizedBox(height: 20),
             Text(
-              "Wedding Dress", // Set your desired song title
+              "Sad Song", // Set your desired song title
               style: TextStyle(
                 color: Colors.black, // Set your desired text color
                 fontSize: 24, // Set your desired font size
@@ -69,7 +93,7 @@ class _LatihanM13State extends State<LatihanM13> {
             ),
             SizedBox(height: 10),
             Text(
-              "Taeyang", // Set your desired artist name
+              "wumbo", // Set your desired artist name
               style: TextStyle(
                 color: Colors.black, // Set your desired text color
                 fontSize: 18, // Set your desired font size
@@ -122,9 +146,15 @@ class _LatihanM13State extends State<LatihanM13> {
                 Icon(Icons.skip_previous,
                     color: Colors.black,
                     size: 36), // Set your desired icon color and size
-                Icon(Icons.pause_circle,
+                InkWell(
+                  onTap:
+                      togglePlayPause, // Toggle play/pause when the button is tapped
+                  child: Icon(
+                    isPlaying ? Icons.pause_circle : Icons.play_circle,
                     color: Colors.black,
-                    size: 60), // Set your desired icon color and size
+                    size: 60,
+                  ),
+                ),
                 Icon(Icons.skip_next,
                     color: Colors.black,
                     size: 36), // Set your desired icon color and size

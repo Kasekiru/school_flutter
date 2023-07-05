@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tugaskelompok1/splashscreen.dart';
 import 'home_screen.dart';
+import 'splashscreen.dart';
 // import 'latihan m14.dart'; //ubah terus
 
 void main() {
@@ -16,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const HomeScreen(),
+      // home: const HomeScreen(),
+      home: SplashScreen(),
       // home: LatihanM14(),
       debugShowCheckedModeBanner: false,
     );

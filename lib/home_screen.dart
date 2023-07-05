@@ -1,6 +1,5 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'todos.dart';
 import 'calendar.dart';
 
@@ -18,6 +17,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  ImageProvider? gambar;
+  getFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        gambar = MemoryImage(bytes);
+      });
+    }
   }
 
   List<Map<String, dynamic>> todos = [];
@@ -576,7 +588,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Card(
                   elevation: 3,
                   child: ListTile(
-                    leading: CircleAvatar(),
+                    leading: CircleAvatar(
+                        child: gambar == null
+                            ? InkWell(
+                                child: Container(
+                                  child: Icon(Icons.people),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    getFromGallery();
+                                  });
+                                },
+                              )
+                            : InkWell(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: gambar!, fit: BoxFit.cover),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    getFromGallery();
+                                  });
+                                },
+                              )),
                     title: Text("Jimmy"),
                     subtitle:
                         Text("Task Finished: ${getTotalFinishedTodosCount()}"),

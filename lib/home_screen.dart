@@ -588,31 +588,94 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Card(
                   elevation: 3,
                   child: ListTile(
-                    leading: CircleAvatar(
-                        child: gambar == null
-                            ? InkWell(
-                                child: Container(
-                                  child: Icon(Icons.people),
+                    leading: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              insetPadding: EdgeInsets.all(100),
+                              child: Container(
+                                height: 300,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        color: Colors
+                                            .white, // Replace with your desired color
+                                        width: double.infinity,
+                                        child: gambar == null
+                                            ? CircleAvatar(
+                                                backgroundColor: Colors.grey,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : CircleAvatar(
+                                                backgroundImage: gambar,
+                                              ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.blue,
+                                      height: 50,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                gambar = null;
+                                              });
+                                              Navigator.pop(
+                                                  context); // Close the dialog
+                                            },
+                                            icon: Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                getFromGallery();
+                                              });
+                                            },
+                                            icon: Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                onTap: () {
-                                  setState(() {
-                                    getFromGallery();
-                                  });
-                                },
-                              )
-                            : InkWell(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: gambar!, fit: BoxFit.cover),
-                                  ),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    getFromGallery();
-                                  });
-                                },
-                              )),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        child: ClipOval(
+                          child: Container(
+                            color: gambar == null
+                                ? Colors.grey
+                                : Colors.transparent,
+                            child: gambar == null
+                                ? Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  )
+                                : Image(
+                                    image: gambar! as ImageProvider<Object>),
+                          ),
+                        ),
+                      ),
+                    ),
                     title: Text("Jimmy"),
                     subtitle:
                         Text("Task Finished: ${getTotalFinishedTodosCount()}"),
